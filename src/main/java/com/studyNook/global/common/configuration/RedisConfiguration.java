@@ -1,6 +1,6 @@
-package com.studyNook.global.common.config.redis;
+package com.studyNook.global.common.configuration;
 
-import com.studyNook.global.common.config.redis.props.RedisProperties;
+import com.studyNook.global.common.props.RedisProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

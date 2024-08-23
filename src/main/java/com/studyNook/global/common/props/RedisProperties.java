@@ -1,4 +1,4 @@
-package com.studyNook.global.common.config.redis.props;
+package com.studyNook.global.common.props;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
