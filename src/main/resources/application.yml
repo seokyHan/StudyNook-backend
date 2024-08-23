@@ -15,7 +15,7 @@ spring:
     password: sseok1979
 
   messages:
-    basename: messages/messages
+    basename: config/i18n/message, config/i18n/error
 
   jpa:
     hibernate:
