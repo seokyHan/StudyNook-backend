@@ -10,9 +10,9 @@ server:
 spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: dburl
-    username: username
-    password: password
+    url: jdbc:mariadb://localhost:3306/testdb?characterEncoding=UTF-8&serverTimezone=UTC&rewriteBatchedStatements=true
+    username: test
+    password: test12
 
   messages:
     basename: config/i18n/message, config/i18n/error
