@@ -1,4 +1,4 @@
-package com.studyNook.global.common.configuration;
+package com.studyNook.global.common.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

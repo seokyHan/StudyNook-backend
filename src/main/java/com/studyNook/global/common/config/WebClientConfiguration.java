@@ -1,4 +1,4 @@
-package com.studyNook.global.common.configuration;
+package com.studyNook.global.common.config;
 
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;

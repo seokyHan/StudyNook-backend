@@ -1,4 +1,4 @@
-package com.studyNook.global.common.configuration;
+package com.studyNook.global.common.config;
 
 import com.studyNook.global.Jwt.props.ExcludeProperties;
 import com.studyNook.global.Jwt.props.JwtProperties;
