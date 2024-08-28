@@ -6,7 +6,7 @@ import com.studyNook.global.Jwt.props.JwtProperties;
 import com.studyNook.global.Jwt.types.TokenType;
 import com.studyNook.global.common.exception.CustomException;
 import com.studyNook.global.common.exception.code.AuthResponseCode;
-import com.studyNook.member.dto.MemberTokenInfoDto;
+import com.studyNook.member.dto.MemberTokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -54,7 +54,7 @@ public class TokenProvider {
         this.redisTemplate = redisTemplate;
     }
 
-    public MemberTokenInfoDto generateToken(Authentication authentication) {
+    public MemberTokenDto generateToken(Authentication authentication) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
@@ -75,7 +75,7 @@ public class TokenProvider {
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
 
-        return MemberTokenInfoDto.of(accessToken, refreshToken);
+        return MemberTokenDto.of(accessToken, refreshToken);
     }
 
     public boolean validateToken(String token){
@@ -92,11 +92,6 @@ public class TokenProvider {
         } catch (UnsupportedJwtException e) {
             throw new CustomException(AuthResponseCode.UNAUTHORIZED, "지원되지 않는 토큰");
         }
-    }
-
-    public String resolveToken(HttpServletRequest request){
-        String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-        return StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ") ? bearerToken.substring(7) : null;
     }
 
     public Authentication getAuthentication(String token) {
