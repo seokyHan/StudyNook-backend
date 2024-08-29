@@ -1,10 +1,10 @@
-package com.studyNook.global.Jwt.config;
+package com.studyNook.global.security.config;
 
-import com.studyNook.global.Jwt.TokenProvider;
-import com.studyNook.global.Jwt.filter.JwtAuthenticationFilter;
-import com.studyNook.global.Jwt.handler.CustomAccessDeniedHandler;
-import com.studyNook.global.Jwt.handler.EntryPointUnauthorizedHandler;
-import com.studyNook.global.Jwt.props.ExcludeProperties;
+import com.studyNook.global.security.jwt.TokenProvider;
+import com.studyNook.global.security.jwt.filter.JwtAuthenticationFilter;
+import com.studyNook.global.security.jwt.handler.CustomAccessDeniedHandler;
+import com.studyNook.global.security.jwt.handler.EntryPointUnauthorizedHandler;
+import com.studyNook.global.security.jwt.props.ExcludeProperties;
 import com.studyNook.global.common.filter.ExceptionHandlerFilter;
 import com.studyNook.global.common.filter.log.LoggingFilter;
 import jakarta.validation.constraints.NotNull;
@@ -33,7 +33,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 
 import static java.util.Arrays.stream;
-import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 

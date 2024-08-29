@@ -1,4 +1,4 @@
-package com.studyNook.global.Jwt.props;
+package com.studyNook.global.security.jwt.props;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

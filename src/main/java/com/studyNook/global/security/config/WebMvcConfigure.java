@@ -1,4 +1,4 @@
-package com.studyNook.global.Jwt.config;
+package com.studyNook.global.security.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;

@@ -1,7 +1,7 @@
-package com.studyNook.global.Jwt.filter;
+package com.studyNook.global.security.jwt.filter;
 
-import com.studyNook.global.Jwt.TokenProvider;
-import com.studyNook.global.Jwt.props.ExcludeProperties;
+import com.studyNook.global.security.jwt.TokenProvider;
+import com.studyNook.global.security.jwt.props.ExcludeProperties;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

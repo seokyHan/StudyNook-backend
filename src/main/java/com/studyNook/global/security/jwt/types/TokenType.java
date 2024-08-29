@@ -1,4 +1,4 @@
-package com.studyNook.global.Jwt.types;
+package com.studyNook.global.security.jwt.types;
 
 public enum TokenType {
     ACCESS_TOKEN,

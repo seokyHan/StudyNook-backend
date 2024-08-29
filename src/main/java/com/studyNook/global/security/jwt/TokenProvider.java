@@ -1,26 +1,23 @@
-package com.studyNook.global.Jwt;
+package com.studyNook.global.security.jwt;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Sets;
-import com.studyNook.global.Jwt.props.JwtProperties;
-import com.studyNook.global.Jwt.types.TokenType;
+import com.studyNook.global.security.jwt.props.JwtProperties;
+import com.studyNook.global.security.jwt.types.TokenType;
 import com.studyNook.global.common.exception.CustomException;
 import com.studyNook.global.common.exception.code.AuthResponseCode;
 import com.studyNook.member.dto.MemberTokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 
 import java.security.Key;
@@ -33,8 +30,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.studyNook.global.Jwt.types.TokenType.ACCESS_TOKEN;
-import static com.studyNook.global.Jwt.types.TokenType.REFRESH_TOKEN;
+import static com.studyNook.global.security.jwt.types.TokenType.ACCESS_TOKEN;
+import static com.studyNook.global.security.jwt.types.TokenType.REFRESH_TOKEN;
 
 @Slf4j
 @Component
