@@ -126,7 +126,7 @@ public class WebSecurityConfigure {
     @NotNull
     private RequestMatcher[] getGuestMatchers() {
         return new RequestMatcher[]{
-                antMatcher(POST, ""),
+                antMatcher(POST, "/users/**"),
         };
     }
 }
