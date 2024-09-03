@@ -58,7 +58,7 @@ public class OAuthAttributes {
 
     public Member toMemberEntity(SocialType socialType, OAuth2UserInfo oAuth2UserInfo){
         return Member.builder()
-                .email(UUID.randomUUID() + "@socialUser.com")
+                .email(oAuth2UserInfo.getEmail())
                 .name(oAuth2UserInfo.getNickname())
                 .nickName(oAuth2UserInfo.getNickname())
                 .imageUrl(oAuth2UserInfo.getImageUrl())
