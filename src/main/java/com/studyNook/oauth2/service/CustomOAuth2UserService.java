@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 
+import static com.studyNook.global.security.jwt.types.Role.ROLE_USER;
 import static com.studyNook.oauth2.types.SocialType.fromRegistrationId;
 
 @Service
@@ -42,9 +43,14 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         OAuthAttributes extractAttributes = OAuthAttributes.of(socialType, userNameAttributes, oAuth2User.getAttributes());
         Member member = getOrCreateMember(extractAttributes, socialType);
 
-
-        //Todo Oauth2 정보 return (email 포함)
-        return null;
+        return new CustomOAuth2User(
+                Collections.singleton(new SimpleGrantedAuthority(ROLE_USER.toString())),
+                oAuth2User.getAttributes(),
+                extractAttributes.getNameAttributeKey(),
+                member.getEmail(),
+                ROLE_USER,
+                true
+        );
     }
 
     private Member getOrCreateMember(OAuthAttributes attributes, SocialType socialType) {
