@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.Optional;
 
 import static com.studyNook.global.security.jwt.types.Role.ROLE_USER;
 import static com.studyNook.oauth2.types.SocialType.fromRegistrationId;
@@ -27,11 +28,10 @@ import static com.studyNook.oauth2.types.SocialType.fromRegistrationId;
 @Transactional(readOnly = true)
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
@@ -41,22 +41,22 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 .getUserInfoEndpoint()
                 .getUserNameAttributeName();
         OAuthAttributes extractAttributes = OAuthAttributes.of(socialType, userNameAttributes, oAuth2User.getAttributes());
-        Member member = getOrCreateMember(extractAttributes, socialType);
+
+        return getOrCreateMember(oAuth2User, extractAttributes, socialType);
+    }
+
+    private CustomOAuth2User getOrCreateMember(OAuth2User oAuth2User, OAuthAttributes attributes, SocialType socialType) {
+        String socialId = attributes.getOAuth2UserInfo().getId();
+        Optional<Member> optionalMember = memberRepository.findBySocialTypeAndSocialId(socialType, socialId);
+        Member member = optionalMember.orElseGet(() -> createNewMember(attributes, socialType));
 
         return new CustomOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(ROLE_USER.toString())),
                 oAuth2User.getAttributes(),
-                extractAttributes.getNameAttributeKey(),
+                attributes.getNameAttributeKey(),
                 member.getEmail(),
-                ROLE_USER,
-                true
+                !optionalMember.isPresent()
         );
-    }
-
-    private Member getOrCreateMember(OAuthAttributes attributes, SocialType socialType) {
-        String socialId = attributes.getOAuth2UserInfo().getId();
-        return memberRepository.findBySocialTypeAndSocialId(socialType, socialId)
-                .orElseGet(() -> createNewMember(attributes, socialType));
     }
 
     private Member createNewMember(OAuthAttributes attributes, SocialType socialType) {
