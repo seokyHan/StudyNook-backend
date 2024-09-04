@@ -7,6 +7,9 @@ import com.studyNook.global.security.jwt.handler.EntryPointUnauthorizedHandler;
 import com.studyNook.global.security.jwt.props.ExcludeProperties;
 import com.studyNook.global.common.filter.ExceptionHandlerFilter;
 import com.studyNook.global.common.filter.log.LoggingFilter;
+import com.studyNook.oauth2.handler.OAuth2LoginFailureHandler;
+import com.studyNook.oauth2.handler.OAuth2LoginSuccessHandler;
+import com.studyNook.oauth2.service.CustomOAuth2UserService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +51,9 @@ public class WebSecurityConfigure {
     private final LoggingFilter loggingFilter;
     private final ExceptionHandlerFilter exceptionHandlerFilter;
     private final ExcludeProperties excludeProperties;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -91,7 +97,8 @@ public class WebSecurityConfigure {
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptionHandling ->
-                        exceptionHandling.accessDeniedHandler(accessDeniedHandler)
+                        exceptionHandling
+                                .accessDeniedHandler(accessDeniedHandler)
                                 .authenticationEntryPoint(unauthorizedHandler)
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -101,6 +108,12 @@ public class WebSecurityConfigure {
                 .addFilterBefore(new JwtAuthenticationFilter(tokenProvider, excludeProperties), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class)
                 .addFilterBefore(loggingFilter, ExceptionHandlerFilter.class)
+                .oauth2Login(configure ->
+                        configure
+                                .userInfoEndpoint(config -> config.userService(customOAuth2UserService))
+                                .successHandler(oAuth2LoginSuccessHandler)
+                                .failureHandler(oAuth2LoginFailureHandler)
+                        )
                 .build();
     }
 
