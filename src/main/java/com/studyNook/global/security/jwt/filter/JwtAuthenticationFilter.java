@@ -33,7 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String requestUri = request.getRequestURI();
 
         if(!isWhitePath(contextPath, requestUri)) {
-            String token = resolveToken(request);
+            String token = tokenProvider.resolveToken(request);
             if(!tokenProvider.validateToken(token)) return;
             userAuthFilter(token);
         }
@@ -45,12 +45,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         Authentication authentication = tokenProvider.getAuthentication(token);
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
-
-    private String resolveToken(HttpServletRequest request){
-        String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-        return StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ") ? bearerToken.substring(7) : null;
-    }
-
     private boolean isWhitePath(String contextPath, String requestUri) {
         return Arrays.stream(excludeProperties.path())
                 .anyMatch(req -> equalsIgnoreCase(requestUri, format("$s%s", contextPath, req)));

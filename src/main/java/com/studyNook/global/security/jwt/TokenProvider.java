@@ -3,6 +3,7 @@ package com.studyNook.global.security.jwt;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Sets;
 import com.studyNook.global.security.jwt.props.JwtProperties;
+import com.studyNook.global.security.jwt.types.Role;
 import com.studyNook.global.security.jwt.types.TokenType;
 import com.studyNook.global.common.exception.CustomException;
 import com.studyNook.global.common.exception.code.AuthResponseCode;
@@ -10,14 +11,17 @@ import com.studyNook.member.dto.MemberTokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 
 import java.security.Key;
@@ -51,28 +55,29 @@ public class TokenProvider {
         this.redisTemplate = redisTemplate;
     }
 
-    public MemberTokenDto generateToken(Authentication authentication) {
-        String authorities = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
-
+    public MemberTokenDto generateToken(String email, Role role) {
         String accessToken = Jwts.builder()
                 .setHeader(jwtHeader)
-                .setSubject(authentication.getName())
-                .claim("role", authorities)
+                .setSubject(email)
+                .claim("role", role)
                 .setExpiration(getTokenExpiration(ACCESS_TOKEN))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
 
         String refreshToken = Jwts.builder()
                 .setHeader(jwtHeader)
-                .setSubject(authentication.getName())
-                .claim("role", authorities)
+                .setSubject(email)
+                .claim("role", role)
                 .setExpiration(getTokenExpiration(REFRESH_TOKEN))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
 
         return MemberTokenDto.of(accessToken, refreshToken);
+    }
+
+    public String resolveToken(HttpServletRequest request){
+        String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+        return StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ") ? bearerToken.substring(7) : "";
     }
 
     public boolean validateToken(String token){
