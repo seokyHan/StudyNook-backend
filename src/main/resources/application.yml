@@ -1,5 +1,5 @@
 server:
-  port: 9001
+  port: 9000
   servlet:
     encoding:
       charset: UTF-8
@@ -87,7 +87,7 @@ jwt:
   refresh-token-validity-in-milliseconds: 12096000
 
 # oauth2 url
-oauth:
+oauth2:
   redirect-url: http://localhost:8080
   access-token-validity-in-milliseconds: 3600000
   refresh-token-validity-in-milliseconds: 12096000
