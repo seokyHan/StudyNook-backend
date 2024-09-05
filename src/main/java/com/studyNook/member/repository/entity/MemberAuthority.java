@@ -3,6 +3,7 @@ package com.studyNook.member.repository.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,4 +26,10 @@ public class MemberAuthority {
     @JsonBackReference(value = "authority")
     private Authority authority;
 
+    @Builder
+    public MemberAuthority(Long id, Member member, Authority authority) {
+        this.id = id;
+        this.member = member;
+        this.authority = authority;
+    }
 }

@@ -1,7 +1,12 @@
 package com.studyNook.oauth2.service;
 
+import com.studyNook.global.common.exception.CustomException;
+import com.studyNook.member.repository.AuthorityRepository;
+import com.studyNook.member.repository.MemberAuthorityRepository;
 import com.studyNook.member.repository.MemberRepository;
+import com.studyNook.member.repository.entity.Authority;
 import com.studyNook.member.repository.entity.Member;
+import com.studyNook.member.repository.entity.MemberAuthority;
 import com.studyNook.oauth2.common.CustomOAuth2User;
 import com.studyNook.oauth2.common.OAuthAttributes;
 import com.studyNook.oauth2.types.SocialType;
@@ -19,16 +24,18 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.Optional;
 
+import static com.studyNook.global.common.exception.code.AuthResponseCode.UNAUTHORIZED;
 import static com.studyNook.global.security.jwt.types.Role.ROLE_USER;
 import static com.studyNook.oauth2.types.SocialType.fromRegistrationId;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final MemberRepository memberRepository;
+    private final AuthorityRepository authorityRepository;
+    private final MemberAuthorityRepository memberAuthorityRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -44,8 +51,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         return getOrCreateMember(oAuth2User, extractAttributes, socialType);
     }
-
-    private CustomOAuth2User getOrCreateMember(OAuth2User oAuth2User, OAuthAttributes attributes, SocialType socialType) {
+    @Transactional(readOnly = true)
+    public CustomOAuth2User getOrCreateMember(OAuth2User oAuth2User, OAuthAttributes attributes, SocialType socialType) {
         String socialId = attributes.getOAuth2UserInfo().getId();
         Optional<Member> optionalMember = memberRepository.findBySocialTypeAndSocialId(socialType, socialId);
         Member member = optionalMember.orElseGet(() -> createNewMember(attributes, socialType));
@@ -58,10 +65,18 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 !optionalMember.isPresent()
         );
     }
-
-    private Member createNewMember(OAuthAttributes attributes, SocialType socialType) {
+    @Transactional
+    public Member createNewMember(OAuthAttributes attributes, SocialType socialType) {
         Member newMember = attributes.toMemberEntity(socialType, attributes.getOAuth2UserInfo());
-        return memberRepository.save(newMember);
+        Authority authority = authorityRepository.findById(2L).orElseThrow(() -> new CustomException(UNAUTHORIZED, "권한이 존재하지 않습니다."));
+        MemberAuthority memberAuthority = MemberAuthority.builder()
+                .member(newMember)
+                .authority(authority)
+                .build();
+        memberRepository.save(newMember);
+        memberAuthorityRepository.save(memberAuthority);
+
+        return newMember;
     }
 
 

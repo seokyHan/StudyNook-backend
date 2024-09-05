@@ -20,26 +20,26 @@ public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "EMAIL")
+    @Column(name = "email")
     private String email;
 
-    @Column(name = "PASSWORD")
+    @Column(name = "password")
     private String password;
 
-    @Column(name = "NAME")
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "NICKNAME")
+    @Column(name = "nickName")
     private String nickName;
 
-    @Column(name = "ACTIVATED")
+    @Column(name = "activated")
     private boolean activated;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "MEMBER_ID", referencedColumnName = "ID")
+    @JoinColumn(name = "member_id", referencedColumnName = "id")
     @JsonManagedReference(value = "member-authority")
     private List<MemberAuthority> authorities;
 
