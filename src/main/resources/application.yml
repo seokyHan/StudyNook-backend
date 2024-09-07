@@ -10,9 +10,9 @@ server:
 spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: ENC(XjEpV7UvEfYBTJWwco+K511OpEWE51sz/pwJ7QxNswgJzN9IliQGH6N/CwsN2vvlz21OCzx0ta07TcMN4xNAFp2uUQb/clTPr0fuCMgkbapcJxZOulE8btVThku6Rpz4jmn+354jL/MPfwd3ynQsZzL2XuLs+O3n)
-    username: ENC(TtkK9cJgwIpstcMs/gT5IQ==)
-    password: ENC(EWVc3fT+dZWPmqznzHUPIg==)
+    url: ENC(k6cDYqgewCDSqJaoUMq/nAbRMsTRmLPlB9rCyKk/IXrOkhWZ216j+SEftd9wJZHwLeefSdGc8TVGkK3LQynO5lnYJkplZblD4WhdGuP9IcxO+oKpc2G0w87HtrkIxZITgjjppkCr7ueD7DDe+kucDzBn40sUSuULdj7hQl4SSBvHs8hmsUqe+A==)
+    username: ENC(qOiSZfjZMZvpvzHasm5OCQ==)
+    password: ENC(nYs4Tejvy+J/wMfoTIXgVOirLIfVy08F)
 
   messages:
     basename: config/i18n/message, config/i18n/error
