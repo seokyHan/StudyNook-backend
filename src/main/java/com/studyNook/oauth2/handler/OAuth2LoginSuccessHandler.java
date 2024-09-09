@@ -86,7 +86,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     private void addCookies(HttpServletResponse response, Member member, MemberTokenDto memberTokenDto) throws IOException {
         setCookie(response, "id", member.getId().toString());
-        setCookie(response, "name", member.getNickName());
+        setCookie(response, "email", member.getEmail());
         setCookie(response, "nickName", member.getNickName());
         setCookie(response, "socialLogin", "success");
         setTokenToCookie(response, ACCESS_TOKEN, memberTokenDto.accessToken(),
