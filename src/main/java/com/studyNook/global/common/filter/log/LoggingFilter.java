@@ -83,15 +83,18 @@ public class LoggingFilter extends OncePerRequestFilter {
     }
 
     private String replaceSensitiveValue(String json) {
-        JsonElement jsonElement = JsonParser.parseString(json);
-        JsonObject asJsonObject = jsonElement.getAsJsonObject();
-
-        for(String sensitiveProperty : SENSITIVE_PROPERTIES){
-            asJsonObject.remove(sensitiveProperty);
-            asJsonObject.addProperty(sensitiveProperty, "*******");
-        }
-
-        return asJsonObject.toString();
+        try {
+            JsonElement jsonElement = JsonParser.parseString(json);
+            JsonObject asJsonObject = jsonElement.getAsJsonObject();
+            for (String sensitiveProperty : SENSITIVE_PROPERTIES) {
+                if(asJsonObject.has(sensitiveProperty)){
+                    asJsonObject.remove(sensitiveProperty);
+                    asJsonObject.addProperty(sensitiveProperty,"*******");
+                }
+            }
+            return asJsonObject.toString();
+        } catch (Exception ignored) {}
+        return json;
     }
 
     private String logPayloadRequest(String contentType, InputStream inputStream) throws IOException {
