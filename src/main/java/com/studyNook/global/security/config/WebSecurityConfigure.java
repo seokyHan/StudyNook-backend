@@ -36,6 +36,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 
 import static java.util.Arrays.stream;
+import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
@@ -79,7 +80,7 @@ public class WebSecurityConfigure {
     @Bean
     public SecurityFilterChain config(HttpSecurity httpSecurity) throws Exception {
         AuthorityAuthorizationManager<RequestAuthorizationContext> admin = AuthorityAuthorizationManager.hasAnyAuthority("ROLE_ADMIN");
-        AuthorityAuthorizationManager<RequestAuthorizationContext> user = AuthorityAuthorizationManager.hasAnyAuthority("ROLE_USER");
+        AuthorityAuthorizationManager<RequestAuthorizationContext> member = AuthorityAuthorizationManager.hasAnyAuthority("ROLE_USER");
         AuthorityAuthorizationManager<RequestAuthorizationContext> guest = AuthorityAuthorizationManager.hasAnyAuthority("ROLE_GUEST");
         AntPathRequestMatcher[] antPathRequestMatchers = stream(excludeProperties.path()).map(AntPathRequestMatcher::antMatcher).toArray(AntPathRequestMatcher[]::new);
 
@@ -91,8 +92,8 @@ public class WebSecurityConfigure {
                 .authorizeHttpRequests(auth ->
                         auth
                                 .requestMatchers(antPathRequestMatchers).permitAll()
+                                .requestMatchers(getMembersMatchers()).access(member)
                                 .requestMatchers(getAdminMatcher()).access(admin)
-                                .requestMatchers(getUserMatchers()).access(user)
                                 .requestMatchers(getGuestMatchers()).access(guest)
                                 .anyRequest().authenticated()
                 )
@@ -123,23 +124,23 @@ public class WebSecurityConfigure {
     }
 
     @NotNull
-    private RequestMatcher[] getUserMatchers() {
+    private RequestMatcher[] getMembersMatchers() {
         return new RequestMatcher[]{
-                antMatcher(POST, "/users/**"),
+                antMatcher(POST, "/members/**")
         };
     }
 
     @NotNull
     private RequestMatcher[] getAdminMatcher() {
         return new RequestMatcher[]{
-                antMatcher(POST, "/users/**"),
+                antMatcher(POST, "/members/**"),
         };
     }
 
     @NotNull
     private RequestMatcher[] getGuestMatchers() {
         return new RequestMatcher[]{
-                antMatcher(POST, "/users/**"),
+                antMatcher(POST, "/members/**"),
         };
     }
 }

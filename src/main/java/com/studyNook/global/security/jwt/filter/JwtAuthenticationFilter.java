@@ -47,6 +47,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
     private boolean isWhitePath(String contextPath, String requestUri) {
         return Arrays.stream(excludeProperties.path())
-                .anyMatch(req -> equalsIgnoreCase(requestUri, format("$s%s", contextPath, req)));
+                .anyMatch(req -> equalsIgnoreCase(requestUri, format("%s%s", contextPath, req)));
     }
 }

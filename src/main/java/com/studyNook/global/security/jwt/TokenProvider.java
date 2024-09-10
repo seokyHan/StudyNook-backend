@@ -20,6 +20,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -28,10 +29,7 @@ import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.studyNook.global.security.jwt.types.TokenType.ACCESS_TOKEN;
@@ -100,6 +98,7 @@ public class TokenProvider {
         String username = getString(token);
         String role = getRole(token);
         List<String> roles = Splitter.on(',').splitToList(role);
+
         return new UsernamePasswordAuthenticationToken(username, "", getRoles(Sets.newHashSet(roles)));
     }
 
