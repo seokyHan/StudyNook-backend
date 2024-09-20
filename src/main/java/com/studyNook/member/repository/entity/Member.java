@@ -53,6 +53,22 @@ public class Member {
     @Column(name = "IMAGE_URL")
     private String imageUrl;
 
+    @Column(name = "TASK")
+    private String task;
+
+    @Column(name = "CAREER")
+    private String career;
+
+    @Column(name = "PUBLIC_YN")
+    private String publicYn;
+
+    @Column(name = "DEPARTMENT")
+    private String department;
+
+    @Column(name = "INTERESTs")
+    private String interests;
+
+
     @Builder
     public Member(String email,
                   String password,
