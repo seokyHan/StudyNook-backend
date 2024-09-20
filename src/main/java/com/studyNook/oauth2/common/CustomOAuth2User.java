@@ -12,16 +12,16 @@ import java.util.Map;
 public class CustomOAuth2User extends DefaultOAuth2User {
 
     private String email;
-    private boolean isFirstLogin;
+    private boolean isFirst;
 
 
     public CustomOAuth2User(Collection<? extends GrantedAuthority> authorities,
                             Map<String, Object> attributes,
                             String nameAttributeKey,
                             String email,
-                            boolean isFirstLogin) {
+                            boolean isFirst) {
         super(authorities, attributes, nameAttributeKey);
         this.email = email;
-        this.isFirstLogin = isFirstLogin;
+        this.isFirst = isFirst;
     }
 }

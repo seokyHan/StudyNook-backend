@@ -1,5 +1,6 @@
 package com.studyNook.oauth2.service;
 
+import com.querydsl.core.util.StringUtils;
 import com.studyNook.global.common.exception.CustomException;
 import com.studyNook.member.repository.AuthorityRepository;
 import com.studyNook.member.repository.MemberAuthorityRepository;
@@ -54,15 +55,14 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     @Transactional(readOnly = true)
     public CustomOAuth2User getOrCreateMember(OAuth2User oAuth2User, OAuthAttributes attributes, SocialType socialType) {
         String socialId = attributes.getOAuth2UserInfo().getId();
-        Optional<Member> optionalMember = memberRepository.findBySocialTypeAndSocialId(socialType, socialId);
-        Member member = optionalMember.orElseGet(() -> createNewMember(attributes, socialType));
+        Member member = memberRepository.findBySocialTypeAndSocialId(socialType, socialId).orElseGet(() -> createNewMember(attributes, socialType));
 
         return new CustomOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(ROLE_USER.toString())),
                 oAuth2User.getAttributes(),
                 attributes.getNameAttributeKey(),
                 member.getEmail(),
-                !optionalMember.isPresent()
+                StringUtils.isNullOrEmpty(member.getCareer()) || StringUtils.isNullOrEmpty(member.getCareer())
         );
     }
     @Transactional

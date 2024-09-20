@@ -48,11 +48,13 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         try {
             CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
 
-            if(oAuth2User.isFirstLogin()) {
+            if(oAuth2User.isFirst()) {
                 setCookie(response, "isFirst", "true");
+                response.sendRedirect(oAuth2Properties.redirectUrl());
+            } else{
+                loginSuccess(response, oAuth2User);
             }
 
-            loginSuccess(response, oAuth2User);
         } catch (Exception e) {
             log.info("social login fail : {}", e.getMessage());
         }
