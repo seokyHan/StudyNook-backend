@@ -93,7 +93,8 @@ oauth2:
 
 exclude:
   path :
-    /members/reissue
+    /members/reissue,
+    /options
 
 # Log
 logging:
