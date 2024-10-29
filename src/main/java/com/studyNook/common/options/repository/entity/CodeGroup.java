@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 public class CodeGroup extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "group_id")
     private String groupId;
 
