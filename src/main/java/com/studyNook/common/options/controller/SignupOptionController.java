@@ -17,6 +17,6 @@ public class SignupOptionController {
 
     @GetMapping
     public ResponseEntity<SignupOptionDto> getSignUpOptions() {
-        return ResponseEntity.ok(service.findAll());
+        return ResponseEntity.ok(service.findSignupOptions());
     }
 }

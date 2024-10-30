@@ -6,11 +6,11 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum OptionType {
-    JOB("job"),
-    EXPERIENCE("experience"),
-    SKILL("skill"),
-    STEP_TITLE("stepTitle"),
-    STATE("state");
+    EXPERIENCE("L01"),
+    JOB("L02"),
+    SKILL("L03"),
+    STATE("L04"),
+    STEP_TITLE("L05");
 
-    private final String type;
+    private final String code;
 }
